@@ -28,9 +28,6 @@
 (setq doom-theme 'doom-outrun-electric)
 
 
-;; If you use `org' and don't want your org files in the default location below,
-;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/Documents/Org/")
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -150,3 +147,18 @@
 (use-package! lsp-origami)
 (add-hook! 'lsp-after-open-hook #'lsp-origami-try-enable)
 projectile-project-search-path '("~/Documents/Local.nosync/")
+
+;; ------------------------------- ;;
+;;;;;;;;;;;;  -ORG-  ;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;  =====  ;;;;;;;;;;;;;;;;
+
+;;Default directory for Org files.
+(setq org-directory "~/Documents/Org/")
+
+;;Hide Org markup indicators.
+(after! org (setq org-hide-emphasis-markers t))
+
+;; Enable logging of done tasks, and log stuff into the LOGBOOK drawer by default
+(after! org
+  (setq org-log-done t)
+  (setq org-log-into-drawer t))
