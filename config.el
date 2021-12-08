@@ -162,3 +162,9 @@ projectile-project-search-path '("~/Documents/Local.nosync/")
 (after! org
   (setq org-log-done t)
   (setq org-log-into-drawer t))
+
+(setq org-capture-templates
+      '(("d" "Demo template" entry
+         (file+headline "organiser.org" "Our first heading")
+         "* DEMO TEXT %?"
+         )))
