@@ -168,3 +168,9 @@ projectile-project-search-path '("~/Documents/Local.nosync/")
          (file+headline "organiser.org" "Our first heading")
          "* DEMO TEXT %?"
          )))
+
+;; --------------------------------- ;;
+;;;;;;;;;;;  -ORG ROAM-  ;;;;;;;;;;;;;;
+;;;;;;;;;;;  ==========  ;;;;;;;;;;;;;;
+
+(setq org-roam-directory "~/Documents/Org/Roam")
