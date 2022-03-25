@@ -148,8 +148,6 @@
 (add-hook! 'lsp-after-open-hook #'lsp-origami-try-enable)
 projectile-project-search-path '("~/Documents/Local.nosync/")
 
-
-
 ;; ------------------------------- ;;
 ;;;;;;;  -ORG SUPER AGENDA-  ;;;;;;;;
 ;;;;;;;  ==================  ;;;;;;;;
@@ -198,55 +196,12 @@ projectile-project-search-path '("~/Documents/Local.nosync/")
    :map org-gtd-process-map
    :desc "Choose"         "C-c C-c" #'org-gtd-choose))
 
-
 ;; ------------------------------- ;;
 ;;;;;;;;;;;;  -ORG-  ;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;  =====  ;;;;;;;;;;;;;;;;
-
-;;Default directory for Org files.
 (setq org-directory "~/Documents/Org/")
-
-;; ;;Hide Org markup indicators.
-;; (after! org (setq org-hide-emphasis-markers t))
-
-;; ;; Enable logging of done tasks, and log stuff into the LOGBOOK drawer by default
-;; (after! org
-;;   (setq org-log-done t)
-;;   (setq org-log-into-drawer t))
-
-;; ;; Org Capture Templates
-
-;; (map! :leader
-;;       :desc "Org Capture"           "x" #'org-capture
-;;       :desc "Pop up scratch buffer" "X" #'doom/open-scratch-buffer)
-
-;; ;; from npsolve/dotfiles
-;; (defun org-capture-select-template-prettier (&optional keys)
-;;   "Select a capture template, in a prettier way than default
-;; Lisp programs can force the template by setting KEYS to a string."
-;;   (let ((org-capture-templates
-;;          (or (org-contextualize-keys
-;;               (org-capture-upgrade-templates org-capture-templates)
-;;               org-capture-templates-contexts)
-;;              '(("t" "Task" entry (file+headline "" "Tasks")
-;;                 "* TODO %?\n  %u\n  %a")))))
-;;     (if keys
-;;         (or (assoc keys org-capture-templates)
-;;             (error "No capture template referred to by \"%s\" keys" keys))
-;;       (org-mks org-capture-templates
-;;                "Select a capture template\n━━━━━━━━━━━━━━━━━━━━━━━━━"
-;;                "Template key: "
-;;                `(("q" ,(concat (all-the-icons-octicon "stop" :face 'all-the-icons-red :v-adjust 0.01) "\tAbort")))))))
-;; (advice-add 'org-capture-select-template :override #'org-capture-select-template-prettier)
-
-;; (setq org-capture-templates
-;;       '(("d" "Demo template" entry
-;;          (file+headline "organiser.org" "Our first heading")
-;;          "* DEMO TEXT %?"
-;;          )))
 
 ;; --------------------------------- ;;
 ;;;;;;;;;;;  -ORG ROAM-  ;;;;;;;;;;;;;;
 ;;;;;;;;;;;  ==========  ;;;;;;;;;;;;;;
-
 (setq org-roam-directory "~/Documents/Org/Roam")
