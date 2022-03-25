@@ -53,3 +53,5 @@
 
 (package! lsp-tailwindcss :recipe (:host github :repo "merrickluo/lsp-tailwindcss"))
 (package! lsp-origami)
+(package! org-super-agenda)
+(package! org-gtd)

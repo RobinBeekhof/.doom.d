@@ -148,6 +148,57 @@
 (add-hook! 'lsp-after-open-hook #'lsp-origami-try-enable)
 projectile-project-search-path '("~/Documents/Local.nosync/")
 
+
+
+;; ------------------------------- ;;
+;;;;;;;  -ORG SUPER AGENDA-  ;;;;;;;;
+;;;;;;;  ==================  ;;;;;;;;
+(use-package! org-super-agenda
+              :after
+              org-agenda
+              :init
+              (setq org-super-agenda-groups '((:name "Today"
+                                                     :time-grid t
+                                                     :scheduled today)
+                                              (:name "Due today"
+                                                     :deadline today)
+                                              (:name "Important"
+                                                     :priority "A")
+                                              (:name "Overdue"
+                                                     :deadline past)
+                                              (:name "Due soon"
+                                                     :deadline future)
+                                              (:name "Big Outcomes"
+                                                     :tag "bo")
+                                              ))
+              :config
+              (org-super-agenda-mode)
+              )
+
+;; ------------------------------- ;;
+;;;;;;;;;;  -ORG-GTD-  ;;;;;;;;;;;;;;
+;;;;;;;;;;  =========  ;;;;;;;;;;;;;;
+(use-package! org-gtd
+  :after org
+  :config
+  (org-edna-mode)
+  (setq org-gtd-directory "~/Documents/Org/gtd")
+  (setq org-gtd-default-file-name "actionable")
+  (setq org-edna-use-inheritance t)
+  (map!
+   :leader
+   (:prefix-map ("d" . "org-gtd")
+    :desc "Capture"        "c"  #'org-gtd-capture
+    :desc "Engage"         "e"  #'org-gtd-engage
+    :desc "Process inbox"  "p"  #'org-gtd-process-inbox
+    :desc "Show all next"  "n"  #'org-gtd-show-all-next
+    :desc "Stuck projects" "s"  #'org-gtd-show-stuck-projects))
+
+  (map!
+   :map org-gtd-process-map
+   :desc "Choose"         "C-c C-c" #'org-gtd-choose))
+
+
 ;; ------------------------------- ;;
 ;;;;;;;;;;;;  -ORG-  ;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;  =====  ;;;;;;;;;;;;;;;;
@@ -155,19 +206,44 @@ projectile-project-search-path '("~/Documents/Local.nosync/")
 ;;Default directory for Org files.
 (setq org-directory "~/Documents/Org/")
 
-;;Hide Org markup indicators.
-(after! org (setq org-hide-emphasis-markers t))
+;; ;;Hide Org markup indicators.
+;; (after! org (setq org-hide-emphasis-markers t))
 
-;; Enable logging of done tasks, and log stuff into the LOGBOOK drawer by default
-(after! org
-  (setq org-log-done t)
-  (setq org-log-into-drawer t))
+;; ;; Enable logging of done tasks, and log stuff into the LOGBOOK drawer by default
+;; (after! org
+;;   (setq org-log-done t)
+;;   (setq org-log-into-drawer t))
 
-(setq org-capture-templates
-      '(("d" "Demo template" entry
-         (file+headline "organiser.org" "Our first heading")
-         "* DEMO TEXT %?"
-         )))
+;; ;; Org Capture Templates
+
+;; (map! :leader
+;;       :desc "Org Capture"           "x" #'org-capture
+;;       :desc "Pop up scratch buffer" "X" #'doom/open-scratch-buffer)
+
+;; ;; from npsolve/dotfiles
+;; (defun org-capture-select-template-prettier (&optional keys)
+;;   "Select a capture template, in a prettier way than default
+;; Lisp programs can force the template by setting KEYS to a string."
+;;   (let ((org-capture-templates
+;;          (or (org-contextualize-keys
+;;               (org-capture-upgrade-templates org-capture-templates)
+;;               org-capture-templates-contexts)
+;;              '(("t" "Task" entry (file+headline "" "Tasks")
+;;                 "* TODO %?\n  %u\n  %a")))))
+;;     (if keys
+;;         (or (assoc keys org-capture-templates)
+;;             (error "No capture template referred to by \"%s\" keys" keys))
+;;       (org-mks org-capture-templates
+;;                "Select a capture template\n━━━━━━━━━━━━━━━━━━━━━━━━━"
+;;                "Template key: "
+;;                `(("q" ,(concat (all-the-icons-octicon "stop" :face 'all-the-icons-red :v-adjust 0.01) "\tAbort")))))))
+;; (advice-add 'org-capture-select-template :override #'org-capture-select-template-prettier)
+
+;; (setq org-capture-templates
+;;       '(("d" "Demo template" entry
+;;          (file+headline "organiser.org" "Our first heading")
+;;          "* DEMO TEXT %?"
+;;          )))
 
 ;; --------------------------------- ;;
 ;;;;;;;;;;;  -ORG ROAM-  ;;;;;;;;;;;;;;
