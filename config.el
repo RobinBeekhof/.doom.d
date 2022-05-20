@@ -104,74 +104,73 @@
 ;;;;;;;;;;;; -ELIXIR- ;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;  ======  ;;;;;;;;;;;;;;;;
 
-(use-package lsp-mode
-  :defer
-  :commands lsp
-  :diminish lsp-mode
-  :hook
-  (elixir-mode . lsp)
-  :init
-  (add-to-list 'exec-path "~/elixir-ls/release/")
-  :config
-  (progn
-   (lsp-register-client
-    (make-lsp-client :new-connection (lsp-tramp-connection "~/elixir-ls/release/language_server.sh")
-                     :major-modes '(elixir-mode)
-                     :remote? t
-                     :server-id 'elixir-ls-remote))))
+;; Configure elixir-lsp
+;; replace t with nil to disable.
+(setq lsp-elixir-fetch-deps nil)
+(setq lsp-elixir-suggest-specs t)
+(setq lsp-elixir-signature-after-complete t)
+(setq lsp-elixir-enable-test-lenses t)
 
-;; file watch
-(setq lsp-enable-file-watchers t)
-(setq lsp-file-watch-threshold 3000)
-(setq-default lsp-file-watch-ignored ())
-(add-to-list 'lsp-file-watch-ignored ".elixir_ls")
-(add-to-list 'lsp-file-watch-ignored "deps")
-(add-to-list 'lsp-file-watch-ignored "_build")
-(add-to-list 'lsp-file-watch-ignored "assets/node_modules")
+;; Compile and test on save
+(setq alchemist-hooks-test-on-save t)
+(setq alchemist-hooks-compile-on-save t)
 
-;; Create a buffer-local hook to run elixir-format on save, only when we enable elixir-mode.
-(add-hook 'elixir-mode-hook
-          (lambda () (add-hook 'before-save-hook 'elixir-format nil t)))
+;; Disable popup quitting for Elixir’s REPL
+;; Default behaviour of doom’s treating of Alchemist’s REPL window is to quit the
+;; REPL when ESC or q is pressed (in normal mode). It’s quite annoying so below
+;; code disables this and set’s the size of REPL’s window to 30% of editor frame’s
+;; height.
+(set-popup-rule! "^\\*Alchemist-IEx" :quit nil :size 0.3)
 
-(use-package! lsp-tailwindcss)
-(add-to-list 'lsp-language-id-configuration '(".*\\.heex$" . "html"))
+;; Do not select exunit-compilation window
+(setq shackle-rules '(("*exunit-compilation*" :noselect t))
+      shackle-default-rule '(:select t))
 
-
-;; alchemist key bindings
-(setq alchemist-key-command-prefix (kbd doom-localleader-key))
-
-;; Enable folding
-(setq lsp-enable-folding t)
-
-;; Add origami and LSP integration
-(use-package! lsp-origami)
-(add-hook! 'lsp-after-open-hook #'lsp-origami-try-enable)
-projectile-project-search-path '("~/Documents/Local.nosync/")
+;; Set global LSP options
+(after! lsp-mode (
+setq lsp-lens-enable t
+lsp-ui-peek-enable t
+lsp-ui-doc-enable nil
+lsp-ui-doc-position 'bottom
+lsp-ui-doc-max-height 70
+lsp-ui-doc-max-width 150
+lsp-ui-sideline-show-diagnostics t
+lsp-ui-sideline-show-hover nil
+lsp-ui-sideline-show-code-actions t
+lsp-ui-sideline-diagnostic-max-lines 20
+lsp-ui-sideline-ignore-duplicate t
+lsp-ui-sideline-enable t))
 
 ;; ------------------------------- ;;
 ;;;;;;;  -ORG SUPER AGENDA-  ;;;;;;;;
 ;;;;;;;  ==================  ;;;;;;;;
+(setq org-agenda-files (list
+                        (concat org-directory "gtd/actionable.org")
+                        ))
+
 (use-package! org-super-agenda
-              :after
-              org-agenda
-              :init
-              (setq org-super-agenda-groups '((:name "Today"
-                                                     :time-grid t
-                                                     :scheduled today)
-                                              (:name "Due today"
-                                                     :deadline today)
-                                              (:name "Important"
-                                                     :priority "A")
-                                              (:name "Overdue"
-                                                     :deadline past)
-                                              (:name "Due soon"
-                                                     :deadline future)
-                                              (:name "Big Outcomes"
-                                                     :tag "bo")
-                                              ))
-              :config
-              (org-super-agenda-mode)
-              )
+  :after
+  org-agenda
+  :init
+  (setq org-super-agenda-groups '(
+                                  (:name "Shallow Work"
+                                   :tag "Shallow"
+                                   :transformer (--> it
+                                                     (propertize it 'face '(:foreground "RosyBrown1"))))
+
+                                  (:name "Focus Work"
+                                   :tag "Focus"
+                                   :transformer (--> it
+                                                     (propertize it 'face '(:foreground "medium purple"))))
+
+                                  (:name "Deep Work"
+                                   :tag "Deep"
+                                   :transformer (--> it
+                                                     (propertize it 'face '(:foreground "dark orchid"))))
+                                  ))
+  :config
+  (org-super-agenda-mode)
+  )
 
 ;; ------------------------------- ;;
 ;;;;;;;;;;  -ORG-GTD-  ;;;;;;;;;;;;;;
@@ -200,6 +199,8 @@ projectile-project-search-path '("~/Documents/Local.nosync/")
 ;;;;;;;;;;;;  -ORG-  ;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;  =====  ;;;;;;;;;;;;;;;;
 (setq org-directory "~/Documents/Org/")
+(setq org-refile-use-outline-path t)                  ; Show full paths for refiling
+
 
 ;; --------------------------------- ;;
 ;;;;;;;;;;;  -ORG ROAM-  ;;;;;;;;;;;;;;
