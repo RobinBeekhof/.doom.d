@@ -154,19 +154,20 @@ lsp-ui-sideline-enable t))
   :init
   (setq org-super-agenda-groups '(
                                   (:name "Shallow Work"
-                                   :tag "Shallow"
+                                   :and (:tag "Shallow")
                                    :transformer (--> it
                                                      (propertize it 'face '(:foreground "RosyBrown1"))))
 
                                   (:name "Focus Work"
-                                   :tag "Focus"
+                                   :and (:tag "Focus" :priority "A")
                                    :transformer (--> it
                                                      (propertize it 'face '(:foreground "medium purple"))))
 
                                   (:name "Deep Work"
-                                   :tag "Deep"
+                                   :and (:tag "Deep" :priority "A")
                                    :transformer (--> it
                                                      (propertize it 'face '(:foreground "dark orchid"))))
+                                  (:discard (:anything))
                                   ))
   :config
   (org-super-agenda-mode)
@@ -206,3 +207,8 @@ lsp-ui-sideline-enable t))
 ;;;;;;;;;;;  -ORG ROAM-  ;;;;;;;;;;;;;;
 ;;;;;;;;;;;  ==========  ;;;;;;;;;;;;;;
 (setq org-roam-directory "~/Documents/Org/Roam")
+
+;; --------------------------------- ;;
+;;;;;;;;;;;  -NOTMUCH-  ;;;;;;;;;;;;;;;
+;;;;;;;;;;;  =========  ;;;;;;;;;;;;;;;
+(setq +notmuch-home-function (lambda () (notmuch-search "tag:inbox")))

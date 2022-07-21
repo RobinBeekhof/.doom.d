@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: frontmatter
+# uuid:
+# key: /fm
+# condition: t
+# --
+---
+title: ${1}
+weight: ${2:90}
+hidden: false
+LastModifierDisplayName: Robin Beekhof
+LastModifierEmail: robin.beekhof@dpgmedia.nl
+date: `(current-time-string)`
+---
