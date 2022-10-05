@@ -197,6 +197,31 @@ lsp-ui-sideline-enable t))
    :desc "Choose"         "C-c C-c" #'org-gtd-choose))
 
 ;; ------------------------------- ;;
+;;;;;;;;;;  -ORG-REF-  ;;;;;;;;;;;;;;
+;;;;;;;;;;  =========  ;;;;;;;;;;;;;;
+(use-package! org-ref
+
+  ;; this bit is highly recommended: make sure Org-ref is loaded after Org
+  :after org
+
+  ;; Put any Org-ref commands here that you would like to be auto loaded:
+  ;; you'll be able to call these commands before the package is actually loaded.
+  :commands
+  (org-ref-cite-hydra/body
+   org-ref-bibtex-hydra/body)
+
+  ;; if you don't need any autoloaded commands, you'll need the following
+  ;; :defer t
+
+  ;; This initialization bit puts the `orhc-bibtex-cache-file` into `~/.doom/.local/cache/orhc-bibtex-cache
+  ;; Not strictly required, but Org-ref will pollute your home directory otherwise, creating the cache file in ~/.orhc-bibtex-cache
+  :init
+  (let ((cache-dir (concat doom-cache-dir "org-ref")))
+    (unless (file-exists-p cache-dir)
+      (make-directory cache-dir t))
+    (setq orhc-bibtex-cache-file (concat cache-dir "/orhc-bibtex-cache"))))
+
+;; ------------------------------- ;;
 ;;;;;;;;;;;;  -ORG-  ;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;  =====  ;;;;;;;;;;;;;;;;
 (setq org-directory "~/Documents/Org/")
@@ -208,7 +233,122 @@ lsp-ui-sideline-enable t))
 ;;;;;;;;;;;  ==========  ;;;;;;;;;;;;;;
 (setq org-roam-directory "~/Documents/Org/Roam")
 
+(use-package! websocket
+    :after org-roam)
+
+(use-package! org-roam-ui
+    :after org-roam ;; or :after org
+;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+;;         a hookable mode anymore, you're advised to pick something yourself
+;;         if you don't care about startup time, use
+;;  :hook (after-init . org-roam-ui-mode)
+    :config
+    (setq org-roam-ui-sync-theme t
+          org-roam-ui-follow t
+          org-roam-ui-update-on-save t
+          org-roam-ui-open-on-start t))
+
+(use-package! org-roam-bibtex
+  :after org-roam
+  :hook (org-roam-mode . org-roam-bibtex-mode)
+  :bind (:map org-mode-map
+         (("C-c n a" . orb-note-actions)))
+  :config
+  (require 'org-ref)) ; optional: if Org Ref is not loaded anywhere else, load it here
+
+;;;; Add the cite-key in the title of the notes and make sure they end up in bibnotes folder.
+;; (setq orb-templates
+;;       '(("r" "ref" plain (function org-roam-capture--get-point) "%?"
+;;          :file-name "bibnotes/${citekey}"
+;;          (use-package! org-roam-bibtex
+;;   :after org-roam
+;;   :hook (org-roam-mode . org-roam-bibtex-mode)
+;;   :bind (:map org-mode-map
+;;          (("C-c n a" . orb-note-actions)))
+;;   :config
+;;   (require 'org-ref)) ; optional: if Org Ref is not loaded anywhere else, load it here
+
+;;;; Add the cite-key in the title of the notes and make sure they end up in bibnotes folder.
+;; (setq orb-templates
+;;       '(("r" "ref" plain (function org-roam-capture--get-point) "%?"
+;;          :file-name "bibnotes/${citekey}"
+;;          :head "#+TITLE: ${citekey}: ${title}\n#+ROAM_KEY: ${ref}\n#+CREATED: %U\n#+LAST_MODIFIED: %U\n"
+;;          :unnarrowed t)))
+
+;; (setq org-roam-capture-templates
+;;         '(("d" "default" plain (function org-roam-capture--get-point) "%?"
+;;          :file-name "%<%Y%m%d%H%M%S>-${slug}"
+;;          :head "#+TITLE: ${title}\n#+ROAM_ALIAS: \n#+CREATED: %U\n#+LAST_MODIFIED: %U\n"
+;;          :unnarrowed t)
+;;          :head "#+TITLE: ${citekey}: ${title}\n#+ROAM_KEY: ${ref}\n#+CREATED: %U\n#+LAST_MODIFIED: %U\n"
+;;          :unnarrowed t)))
+
+;; (setq org-roam-capture-templates
+;;         '(("d" "default" plain (function org-roam-capture--get-point) "%?"
+;;          :file-name "%<%Y%m%d%H%M%S>-${slug}"
+;;          :head "#+TITLE: ${title}\n#+ROAM_ALIAS: \n#+CREATED: %U\n#+LAST_MODIFIED: %U\n"
+;;          :unnarrowed t)))
+
 ;; --------------------------------- ;;
 ;;;;;;;;;;;  -NOTMUCH-  ;;;;;;;;;;;;;;;
 ;;;;;;;;;;;  =========  ;;;;;;;;;;;;;;;
 (setq +notmuch-home-function (lambda () (notmuch-search "tag:inbox")))
+
+
+;; ------------------------------- ;;
+;;;;;;;;;;  -ORG-WSJF-  ;;;;;;;;;;;;;;
+;;;;;;;;;;  =========  ;;;;;;;;;;;;;;
+
+(defun org-wsjf-put-value ()
+    (org-entry-put (point) "VALUE" (read-string "Value: ")))
+
+;; ------------------------------- ;;
+;;;;;;;;;;  -md4rd-  ;;;;;;;;;;;;;;
+;;;;;;;;;;  =========  ;;;;;;;;;;;;;;
+
+(when (require 'md4rd nil 'noerror)
+
+  (setq md4rd-subs-active
+        '(academicbiblical
+          askhistorian
+          askreddit
+          askscience
+          bitcoin
+          changemyview
+          clojure
+          common_lisp
+          compsci
+          cryptocurrency
+          emacs
+          fire
+          futurelings
+          guile
+          guix
+          ipfs
+          learnprogramming
+          linux
+          lisp
+          neutralpolitics
+          nixos
+          outoftheloop
+          personalfinance
+          politics
+          programming
+          racket
+          science
+          todayilearned
+          unpopularopinion
+          worldnews))
+
+  (defun consider-refresh-md4rd-login ()
+    (when (and (boundp 'md4rd--oauth-client-id)
+               (boundp 'md4rd--oauth-access-token)
+               (boundp 'md4rd--oauth-refresh-token)
+               (not (string= "" md4rd--oauth-client-id))
+               (not (string= "" md4rd--oauth-access-token))
+               (not (string= "" md4rd--oauth-refresh-token)))
+      (md4rd-refresh-login)))
+
+  (run-with-timer 0 3540 'consider-refresh-md4rd-login)
+
+  (add-hook 'md4rd-mode-hook 'md4rd-indent-all-the-lines))

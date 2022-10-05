@@ -52,6 +52,17 @@
 (package! evil-tutor)
 
 (package! lsp-tailwindcss :recipe (:host github :repo "merrickluo/lsp-tailwindcss"))
+(package! md4rd)
 (package! lsp-origami)
 (package! org-super-agenda)
 (package! org-gtd)
+(package! org-ref)
+(package! org-roam-ui)
+(package! org-roam-bibtex
+  :recipe (:host github :repo "org-roam/org-roam-bibtex"))
+
+;; When using org-roam via the `+roam` flag
+(unpin! org-roam)
+
+;; When using bibtex-completion via the `biblio` module
+(unpin! bibtex-completion helm-bibtex ivy-bibtex)
