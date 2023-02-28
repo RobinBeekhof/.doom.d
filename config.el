@@ -29,7 +29,7 @@
 
 
 
-;; This determines the style of line numbers in effect. If set to `nil', line
+;; This determines tFFFle of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type 'relative)
 
@@ -141,6 +141,25 @@ lsp-ui-sideline-diagnostic-max-lines 20
 lsp-ui-sideline-ignore-duplicate t
 lsp-ui-sideline-enable t))
 
+;; If you use web-mode.el
+
+(define-derived-mode heex-mode web-mode "HEEx"
+                     "Major mode for editing HEEx files")
+(add-to-list 'auto-mode-alist '("\\.heex?\\'" . heex-mode))
+
+;; (use-package! tree-sitter
+;;    :hook (prog-mode . turn-on-tree-sitter-mode)
+;;    :hook (tree-sitter-after-on . tree-sitter-hl-mode)
+;;    :config
+;;    (require 'tree-sitter-langs)
+;;    (add-to-list 'tree-sitter-load-path (file-name-as-directory "~/.local/share/tree-sitter/"))
+;;    (tree-sitter-load 'heex)
+;;    (add-to-list 'tree-sitter-major-mode-language-alist '(heex-mode . heex))
+;;    ;; This makes every node a link to a section of code
+;;    (setq tree-sitter-debug-jump-buttons t
+;;          ;; and this highlights the entire sub tree in your code
+;;          tree-sitter-debug-highlight-jump-region t))
+
 ;; ------------------------------- ;;
 ;;;;;;;  -ORG SUPER AGENDA-  ;;;;;;;;
 ;;;;;;;  ==================  ;;;;;;;;
@@ -172,6 +191,7 @@ lsp-ui-sideline-enable t))
   :config
   (org-super-agenda-mode)
   )
+
 
 ;; ------------------------------- ;;
 ;;;;;;;;;;  -ORG-GTD-  ;;;;;;;;;;;;;;
@@ -305,50 +325,3 @@ lsp-ui-sideline-enable t))
 ;; ------------------------------- ;;
 ;;;;;;;;;;  -md4rd-  ;;;;;;;;;;;;;;
 ;;;;;;;;;;  =========  ;;;;;;;;;;;;;;
-
-(when (require 'md4rd nil 'noerror)
-
-  (setq md4rd-subs-active
-        '(academicbiblical
-          askhistorian
-          askreddit
-          askscience
-          bitcoin
-          changemyview
-          clojure
-          common_lisp
-          compsci
-          cryptocurrency
-          emacs
-          fire
-          futurelings
-          guile
-          guix
-          ipfs
-          learnprogramming
-          linux
-          lisp
-          neutralpolitics
-          nixos
-          outoftheloop
-          personalfinance
-          politics
-          programming
-          racket
-          science
-          todayilearned
-          unpopularopinion
-          worldnews))
-
-  (defun consider-refresh-md4rd-login ()
-    (when (and (boundp 'md4rd--oauth-client-id)
-               (boundp 'md4rd--oauth-access-token)
-               (boundp 'md4rd--oauth-refresh-token)
-               (not (string= "" md4rd--oauth-client-id))
-               (not (string= "" md4rd--oauth-access-token))
-               (not (string= "" md4rd--oauth-refresh-token)))
-      (md4rd-refresh-login)))
-
-  (run-with-timer 0 3540 'consider-refresh-md4rd-login)
-
-  (add-hook 'md4rd-mode-hook 'md4rd-indent-all-the-lines))

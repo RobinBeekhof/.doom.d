@@ -11,6 +11,7 @@
  '(warning-suppress-types
    '(((yasnippet zombie))
      ((yasnippet zombie))
+     ((yasnippet zombie))
      (org-element-cache))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
