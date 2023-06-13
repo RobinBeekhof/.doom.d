@@ -95,6 +95,7 @@
        ;;gist              ; interacting with github gists
        lookup              ; navigate your code and its documentation
        (lsp +peek)         ; M-x vscode
+       tree-sitter
        magit               ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs
        ;;pass              ; password manager for nerds
@@ -177,8 +178,10 @@
        ;;solidity          ; do you need a blockchain? No.
        ;;swift             ; who asked for emoji variables?
        ;;terra             ; Earth and Moon in alignment for performance.
-       web                 ; the tubes
-       yaml                ; JSON, but readable
+       (web
+        +lsp
+        + tree-sitter)
+        yaml                ; JSON, but readable
        ;;zig               ; C, but simpler
 
        :email

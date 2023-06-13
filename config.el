@@ -29,7 +29,7 @@
 
 
 
-;; This determines tFFFle of line numbers in effect. If set to `nil', line
+;; This determines the of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type 'relative)
 
@@ -97,9 +97,6 @@
                               ("mkv" . "mpv")
                               ("mp4" . "mpv")))
 
-
-
-
 ;; -------------------------------- ;;
 ;;;;;;;;;;;; -ELIXIR- ;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;  ======  ;;;;;;;;;;;;;;;;
@@ -143,9 +140,9 @@ lsp-ui-sideline-enable t))
 
 ;; If you use web-mode.el
 
-(define-derived-mode heex-mode web-mode "HEEx"
-                     "Major mode for editing HEEx files")
-(add-to-list 'auto-mode-alist '("\\.heex?\\'" . heex-mode))
+;; (define-derived-mode heex-mode web-mode "HEEx"
+;;                      "Major mode for editing HEEx files")
+;; (add-to-list 'auto-mode-alist '("\\.heex?\\'" . heex-mode))
 
 ;; (use-package! tree-sitter
 ;;    :hook (prog-mode . turn-on-tree-sitter-mode)
@@ -191,7 +188,6 @@ lsp-ui-sideline-enable t))
   :config
   (org-super-agenda-mode)
   )
-
 
 ;; ------------------------------- ;;
 ;;;;;;;;;;  -ORG-GTD-  ;;;;;;;;;;;;;;
@@ -322,6 +318,8 @@ lsp-ui-sideline-enable t))
 (defun org-wsjf-put-value ()
     (org-entry-put (point) "VALUE" (read-string "Value: ")))
 
-;; ------------------------------- ;;
-;;;;;;;;;;  -md4rd-  ;;;;;;;;;;;;;;
-;;;;;;;;;;  =========  ;;;;;;;;;;;;;;
+
+;; ------------------------------- ;;;
+;;;;;;;;;;  -Tailwind-  ;;;;;;;;;;;;;;
+;;;;;;;;;;  =========  ;;;;;;;;;;;;;;;
+(use-package! lsp-tailwindcss)
